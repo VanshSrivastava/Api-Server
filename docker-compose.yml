@@ -1,0 +1,34 @@
+version: "3.9"
+
+services:
+  assignment-api-server:
+    container_name: assignment-api-server-image
+    build: .
+    image: ndm07/api_server
+    ports:
+      - "8080:8080"
+    environment:
+      - PG_DB=api_server_db
+      - PG_USER=vansh
+      - PG_PASSWORD=7777
+      - PG_HOST=assignment-database-image
+    depends_on:
+      - assignment-database
+    restart: always
+    # command: sh setup.sh
+
+  assignment-database:
+    container_name: assignment-database-image
+
+    image: postgres:latest
+    ports:
+      - "5000:5000"
+    environment:
+      - POSTGRES_DB=api_server_db
+      - POSTGRES_USER=vansh
+      - POSTGRES_PASSWORD=7777
+    volumes:
+      - api_db_data:/var/lib/postgresql/data
+
+volumes:
+  api_db_data: {}
